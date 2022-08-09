@@ -1,12 +1,17 @@
-import { View, StyleSheet, Text, FlatList } from "react-native"
+import { View, StyleSheet, Text, FlatList,Alert } from "react-native"
 import axios from "axios";
 import { useEffect, useState } from 'react';
 
+export type details = {
+    name :string,
+    nasa_jpl_url :string,
+    is_potentially_hazardous_asteroid :boolean
+}
 
 
 const Asteroid = ({ navigation, route }: any) => {
-    const [asteroidData, setAsteroidData] = useState<any>([])
-    const [details,setDetails]= useState<any>([])
+    const [asteroidData, setAsteroidData] = useState<details>([])
+    const [details,setDetails]= useState<details>([])
     const [error, setError] = useState(false)
     const asteroidId = route.params.asteroidId
 
@@ -19,6 +24,7 @@ const Asteroid = ({ navigation, route }: any) => {
         nasaAPI.get(`/neo/rest/v1/neo/${asteroidId}?api_key=t3cGQFvrHF51nin4alfdqDGfeRoYe8DZQ4cx9yrq`)
             .then((response: any) => setAsteroidData(details.concat(response.data)))
             .catch((error: any) => setError(true))
+           
     }
    console.log("ABC",setAsteroidData)
     useEffect(() => getAsteroidDetails(), [])
@@ -37,7 +43,7 @@ const Asteroid = ({ navigation, route }: any) => {
                             <View style ={styles.listView}>
                                 <Text style ={styles.text}>Name : {item?.item?.name}</Text>
                                 <Text style ={styles.text}> nasa_jpl_url : {item?.item?.nasa_jpl_url}</Text>
-                                <Text style ={styles.text}> is_potentially_hazardous_asteroid : {item?.item?.is_potentially_hazardous_asteroid}</Text>
+                                <Text style ={styles.text}> is_potentially_hazardous_asteroid : {item?.item?.is_potentially_hazardous_asteroid?'True':'False'}</Text>
                                
                            
                            
