@@ -2,12 +2,20 @@ import { View, StyleSheet, Text, FlatList } from "react-native"
 import axios from "axios";
 import { useEffect, useState } from 'react';
 
+ export type details = {
+    name :string,
+    nasa_jpl_url :string,
+    is_potentially_hazardous_asteroid :string,
+    id :number
 
+
+
+ }
 
 const RandomAsteroid = ({}: any) => {
     
-        const [randomid, setrandomid] = useState<any>([])
-        const [randomData,setRandomData] = useState<any>([])
+        const [randomid, setRandomid] = useState<details>([])
+        const [randomData,setRandomData] = useState<details>([])
         const [id,setId] =useState<any>([])
          const [error, setError] = useState(false)
     
@@ -20,31 +28,33 @@ const RandomAsteroid = ({}: any) => {
             
     
             countryAPI.get(`neo/rest/v1/neo/browse?api_key=DEMO_KEY`)
-                .then((response: any) => setrandomid(randomData.concat(response.data.id)))
+                .then((response: any) =>setRandomid(id.concat(response.data.near_earth_objects)))
+                // {const { data } = response;
+                // const { near_earth_objects } = data;
+                // const asteroidArray =
+                //   near_earth_objects[Object.keys(near_earth_objects)[0]];
+                // const randomIds = asteroidArray.map((item: any) => {
+                //   return item.id;
+                // });
+                // setRandomid(randomIds);
+                // console.log(setRandomid)
+            //   })
                 .catch((error: any) => setError(true))
+                
         }
-        // console.log(getRandomId)
+       
         useEffect(() => getRandomId(), []) 
     
     
          const ids = randomid.id
         // console.log(ids)
      
-    //    const newid= randomData.id
+ 
     
     
     
     
-       
-       const getId = () => {
-            
     
-        countryAPI.get(`neo/rest/v1/neo/${randomid}?api_key=t3cGQFvrHF51nin4alfdqDGfeRoYe8DZQ4cx9yrq`)
-            .then((response: any) => setId(response.get))
-            .catch((error: any) => setError(true))
-    }
-    console.log(getId)
-    useEffect(() => getId(), []) 
     
     
     
@@ -60,17 +70,17 @@ const RandomAsteroid = ({}: any) => {
                             
                             return ( 
                                 <View style ={styles.listView}>
-                                    <Text style ={styles.text}>Name : {randomid.name}</Text>
-                                    <Text style ={styles.text}> nasa_jpl_url : {randomid. nasa_jpl_url}</Text>
-                                    <Text style ={styles.text}>is_potentially_hazardous_asteroid : {randomid.is_potentially_hazardous_asteroid}</Text>
+                                    <Text style ={styles.nameText}>Name : {item?.item?.name}</Text>
+                                    <Text style ={styles.urlText}> nasa_jpl_url : {item?.item?.nasa_jpl_url}</Text>
+                                    <Text style ={styles.text}>is_potentially_hazardous_asteroid : {item?.item?.is_potentially_hazardous_asteroid?'True':'False'}</Text>
                                    
                                
                                 </View>
     
-                            ) 
+                             ) 
                          }}
                         keyExtractor={(item : any) => Math.random().toString(16).slice(2)}
-                    /> 
+                    />  
                 </View>
             
     
@@ -92,8 +102,27 @@ const styles = StyleSheet.create({
       fontSize : 16,
       marginBottom : 20
     },
+    urlText :{
+        fontSize : 16,
+        marginBottom : 20,
+        fontWeight:"italics"
+      },
+    nameText :{
+        fontSize : 16,
+        marginBottom : 20,
+        fontWeight:"bold"
+      },
     listView:{
-        padding :20
+        padding: 20,
+        borderRadius: 1,
+        borderStartColor:"#171717",
+        shadowColor: '#171717',
+        shadowOffset: {width: -2, height: 4},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        elevation:3,
+        marginTop:2,
+        margin:"2%",
     },
     invalid :{
         color :"#a83232"
